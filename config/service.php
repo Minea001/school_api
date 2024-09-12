@@ -10,6 +10,10 @@ class service {
     {
         $this->databaseConnection = $databaseConnection;
     }
+    public function test() {
+        return "hi";
+    }
+
     // test insert
     public function seedStudent()
     {
@@ -62,7 +66,7 @@ class service {
         }
     }
     // function Show data
-    function fun_showdata($par_table, $par_field)
+    function fun_showdata($par_table, $par_field = null)
     {
         $this->pro_conn = new connection();
 

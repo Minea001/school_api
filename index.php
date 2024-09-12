@@ -1,6 +1,6 @@
 <?php
 $request = $_SERVER['REQUEST_URI'];
-$request = str_replace('/api_test/index.php/', '', $request);
+$request = str_replace('/school_api/index.php/', '', $request);
 $request = strtok($request, '?');
 $segments = explode('/', $request);
 

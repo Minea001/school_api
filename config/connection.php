@@ -21,7 +21,6 @@ class connection {
       if ($this->conn->connect_error) {
          die("Connect error !..". $this->conn->connect_error);
       }
-
       return $this->conn;
    }
 
