@@ -16,7 +16,9 @@ class connection {
    }
    public function get_connection()
    {
+      
       $this->conn = mysqli_connect($this->host_name, $this->user_name, $this->password, $this->database);
+      $this->conn->set_charset("utf8mb4"); // support khmer unicode
 
       if ($this->conn->connect_error) {
          die("Connect error !..". $this->conn->connect_error);

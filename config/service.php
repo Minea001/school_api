@@ -1,6 +1,6 @@
 <?php
 require_once(APP_PATH_CONNECTION . "/connection.php");
-header("Content-Type: application/json; charset=UTF-8");
+header('Content-Type: application/json; charset=utf-8');
 
 class service {
     private $pro_conn, $pro_sql, $pro_cmd, $pro_count, $pro_result, $pro_arr, $pro_record, $pro_target;
@@ -8,29 +8,52 @@ class service {
 
     function __construct($databaseConnection)
     {
-        $this->databaseConnection = $databaseConnection;
-    }
-    public function test() {
-        return "hi";
+       $this->databaseConnection = $databaseConnection;
+       $this->pro_conn = new connection();
     }
 
-    // test insert
-    public function seedStudent()
-    {
-        try {
-            $sql = "INSERT INTO tbl_class (class_name, description)
-                    VALUES  ('John', 'This is my first test'),
-                            ('Jane', 'This is my first test'),
-                            ('John', 'This is my first test'),
-                            ('Jenny','This is my first test')";
+    function save($table_name, $data) {
+        $fields = array();
+        $values = array();
 
-            $statement = $this->databaseConnection->query($sql);
-            return $statement->rowCount();
-
-        } catch (PDOException $exception) {
-            exit($exception->getMessage());
+        foreach ($data as $k => $v) {
+            $fields[] = $k;
+            $values[] = $v;
         }
+
+        // print json_encode($values);
+        // return;
+        $this->pro_sql = "INSERT INTO $table_name (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")";
+        $this->pro_cmd = mysqli_query($this->pro_conn->get_connection(), $this->pro_sql);
+        if ($this->pro_cmd == 1) {
+            $this->pro_result = true;
+        } else {
+            $this->pro_result = false;
+        }
+
     }
+
+    // public function test() {
+    //     return "hi";
+    // }
+
+    // // test insert
+    // public function seedStudent()
+    // {
+    //     try {
+    //         $sql = "INSERT INTO tbl_class (class_name, description)
+    //                 VALUES  ('John', 'This is my first test'),
+    //                         ('Jane', 'This is my first test'),
+    //                         ('John', 'This is my first test'),
+    //                         ('Jenny','This is my first test')";
+
+    //         $statement = $this->databaseConnection->query($sql);
+    //         return $statement->rowCount();
+
+    //     } catch (PDOException $exception) {
+    //         exit($exception->getMessage());
+    //     }
+    // }
 
     function fun_insertData($par_table, $par_fields, $par_value)
     {
