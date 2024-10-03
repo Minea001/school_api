@@ -5,27 +5,26 @@ require_once(APP_PATH_SERVICE . "/service.php");
 
 class student {
 
-    public $service;
+    public $service, $db;
 
     function __construct()
     {
         // call connection
-        $db = new connection();
-        $this->service = new service($db);
+        $this->db = new connection();
+        $this->service = new service($this->db);
     }
 
+    /** Save Student */
     function save($students) {   
-        $json = file_get_contents('php://input');
-        // Decode the JSON into an associative array
-        $students = json_decode($json, true);
+
         $data = array (
-            "student_id" => $students->student_id,
-            "khmer_name" => $students->khmer_name
+            "student_id" => isset($students->student_id) ? $students->student_id : "",
+            "khmer_name" => isset($students->khmer_name) ? $students->khmer_name : ""
         );
-        print json_encode($data);
-        // die();
-        // $res = $this->service->save("tbl_student", $data);
-        // return $res;
+        
+        // call funtion save
+        $res = $this->service->save("tbl_student", $data);
+        $this->db->success($res);
     }
 
     /** Get Student List */
