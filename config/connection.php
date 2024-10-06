@@ -6,6 +6,7 @@ class connection {
    private $database = "school_ms";
    private $host_name = "localhost";
    public $conn;
+   public $last_id;
 
    /**
     * Class constructor.
@@ -16,16 +17,16 @@ class connection {
    }
    public function get_connection()
    {
-      
       $this->conn = mysqli_connect($this->host_name, $this->user_name, $this->password, $this->database);
-      // $this->conn->set_charset("utf8mb4"); // support khmer unicode
+      $this->conn->set_charset("utf8mb4"); // support khmer unicode
+      // get last id
+      $this->last_id = $this->conn->insert_id;
 
       if ($this->conn->connect_error) {
          print("Connect error !..". $this->conn->connect_error);
       } else {
-         // echo "connection success!";
+         return $this->conn;
       }
-      return $this->conn;
    }
 
    public function fun_closecon()

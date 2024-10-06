@@ -12,9 +12,8 @@ class room {
     }
 
     function getList() {
-       $res = $this->service->fun_showdata("tbl_room", "id");
+       $res = $this->service->getData("tbl_room", "id");
        $this->db->success($res);
-
     }
 
     function save($room) {
@@ -27,37 +26,14 @@ class room {
             "description" => $rooms->description,
             "is_deleted" => 0
         );
-        // call funtion save
-        
-        if ($rooms->id == 0 || $rooms->id == null) {
+
+        if (isset($rooms->id) == 0) {
             $res = $this->service->save("tbl_room", $data);
-            $this->last_id = $res;
+            $rooms->id = $this->db->last_id;
         } else {
-            $res = $this->service->update("tbl_room", $data, $this->last_id);
+            $res = $this->service->update("tbl_room", $data, "WHERE id = $rooms->id ");
         }
-        $this->db->success($res);
+        return $res;
     }
-    function _get_last_id($tbl_name) {
-         $ret = $this->service->_get_last_id($tbl_name);
-         echo $ret;
-    }
-
-    // function save($room) {
-    //     $fields = array();
-    //     $values = array();
-
-    //     foreach ($room as $k => $v) {
-    //         $fields[] = $k;
-    //         $values[] = $v;
-    //     }
-    //     $res = $this->service->fun_insertData("tbl_room", $fields, $values);
-    //     $last_id = $room[$k]->id;
-    //     echo $last_id;
-    //     if ($res) {
-    //         $this->db->success($res);
-    //     } else {
-    //         return;
-    //     }
-    // }
 }
 ?>

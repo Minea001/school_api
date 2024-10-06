@@ -38,22 +38,22 @@ class service {
         $this->pro_cmd = mysqli_query($this->pro_conn->get_connection(), $this->pro_sql);
 
         if ($this->pro_cmd == 1) {
-            $this->pro_record = $this->_get_last_id($table_name);
+            $this->pro_result = true; 
         } else {
             $this->pro_result = false; 
         }
         
-        return $this->pro_record;
+        return $this->pro_result;
     }
 
-    function update($table_name, $data, $id) {
+    function update($table_name, $data, $con) {
         $tmp = array();
 
         foreach ($data as $k => $v) {
             $tmp[] = "$k = '$v'";
         }
 
-        $this->pro_sql = "UPDATE " . $table_name . " SET " . implode(", ", $tmp) . " WHERE id = $id";
+        $this->pro_sql = "UPDATE " . $table_name . " SET " . implode(", ", $tmp) . " $con ";
         $this->pro_cmd = mysqli_query($this->pro_conn->get_connection(), $this->pro_sql);
 
         if ($this->pro_cmd == 1) {
@@ -65,48 +65,42 @@ class service {
         return $this->pro_cmd;
     }
 
-     function _get_last_id($table_name) {
-        $this->pro_sql = "SELECT id FROM " . $table_name . " ORDER BY id DESC LIMIT 1";
-        $this->pro_cmd = mysqli_query($this->pro_conn->get_connection(), $this->pro_sql);
-        $this->pro_record = mysqli_fetch_assoc($this->pro_cmd);
-        return $this->pro_record;
-    }
+    // function fun_insertData($par_table, $par_fields, $par_value)
+    // {
+    //     $this->pro_conn = new connection();
 
-    function fun_insertData($par_table, $par_fields, $par_value)
-    {
-        $this->pro_conn = new connection();
+    //     $this->pro_count = count($par_fields);
+    //     $this->pro_sql = "INSERT INTO $par_table(";
+    //     for ($x = 0; $x < $this->pro_count; $x++) {
+    //         $this->pro_sql .= $par_fields[$x];
+    //         if ($x < ($this->pro_count - 1)) {
+    //             $this->pro_sql .= ",";
+    //         } else {
+    //             $this->pro_sql .= ") VALUES(";
+    //         }
+    //     }
+    //     for ($x = 0; $x < $this->pro_count; $x++) {
+    //         $this->pro_sql .= "'$par_value[$x]'";
+    //         if ($x < ($this->pro_count - 1)) {
+    //             $this->pro_sql .= ",";
+    //         } else {
+    //             $this->pro_sql .= ")";
+    //         }
 
-        $this->pro_count = count($par_fields);
-        $this->pro_sql = "INSERT INTO $par_table(";
-        for ($x = 0; $x < $this->pro_count; $x++) {
-            $this->pro_sql .= $par_fields[$x];
-            if ($x < ($this->pro_count - 1)) {
-                $this->pro_sql .= ",";
-            } else {
-                $this->pro_sql .= ") VALUES(";
-            }
-        }
-        for ($x = 0; $x < $this->pro_count; $x++) {
-            $this->pro_sql .= "'$par_value[$x]'";
-            if ($x < ($this->pro_count - 1)) {
-                $this->pro_sql .= ",";
-            } else {
-                $this->pro_sql .= ")";
-            }
+    //         //command SQL statement to db
+    //         $this->pro_cmd = mysqli_query($this->pro_conn->get_connection(), $this->pro_sql);
+    //         if ($this->pro_cmd == 1) {
+    //             $this->pro_result = true;
+    //         } else {
+    //             $this->pro_result = false;
+    //         }
+    //         // Accessing close connection
+    //         $this->pro_conn->fun_closecon();
+    //     }
+    // }
 
-            //command SQL statement to db
-            $this->pro_cmd = mysqli_query($this->pro_conn->get_connection(), $this->pro_sql);
-            if ($this->pro_cmd == 1) {
-                $this->pro_result = true;
-            } else {
-                $this->pro_result = false;
-            }
-            // Accessing close connection
-            $this->pro_conn->fun_closecon();
-        }
-    }
     // function Show data
-    function fun_showdata($par_table, $par_field = null)
+    function getData($par_table, $par_field = null)
     {
         $this->pro_conn = new connection();
 
@@ -122,10 +116,9 @@ class service {
         return $this->pro_arr;
     }
     // function find record
-    function fun_showdatabyId($par_table,$par_arrfield,$par_arrvalue) 
+    function getDataById($par_table,$par_arrfield,$par_arrvalue) 
     {
         $this->pro_conn = new connection();
-
         //create empty array
         $this->pro_arr = array();
         //create sql statement
@@ -136,7 +129,7 @@ class service {
         return $this->pro_record;
     }
 
-    function fun_deleterecord($arg_table,$arg_fid,$arg_vid)
+    function delete($arg_table,$arg_fid,$arg_vid)
     {
         $this->pro_conn = new connection();
 
